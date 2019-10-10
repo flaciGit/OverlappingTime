@@ -8,14 +8,41 @@ namespace OverlappingTime
 {
     class Program
     {
+
+        static public bool CanViewAll(Movie[] movies)
+        {
+
+            for (int i = 0; i < movies.Count() - 1; i++)
+            {
+                for (int j = i + 1; j < movies.Count(); j++)
+                {
+                    if (movies[i].Start < movies[j].End && movies[j].Start < movies[i].End)
+                        return false;
+                }
+            }
+            return true;
+        }
+        
         static void Main(string[] args)
         {
-            // The code provided will print ‘Hello World’ to the console.
-            // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
-            Console.WriteLine("Hello World!");
-            Console.ReadKey();
 
-            // Go to http://aka.ms/dotnet-get-started-console to continue learning how to build a console app! 
+            var format = System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat;
+
+            Movie[] movies = new Movie[]
+            {
+                //overlapping example:
+                new Movie(DateTime.Parse("1/1/2015 20:10", format), DateTime.Parse("1/1/2015 22:30", format)),
+                
+                //these are not overlapping:
+                new Movie(DateTime.Parse("1/1/2015 20:00", format), DateTime.Parse("1/1/2015 21:30", format)),
+                new Movie(DateTime.Parse("1/1/2015 23:10", format), DateTime.Parse("1/1/2015 23:30", format)),
+                new Movie(DateTime.Parse("1/1/2015 21:30", format), DateTime.Parse("1/1/2015 23:00", format))
+            };
+            
+            Console.WriteLine("Can I view all movies? " + CanViewAll(movies));
+            
+            Console.ReadKey();
+            
         }
     }
 }
